@@ -243,7 +243,7 @@ DemoTickPlusPythonSkill/
 ## 🔗 相关链接
 
 - TickPlus 官网: http://www.tickplus.org
-- API 文档: http://www.tickplus.org/apidoc
+- API 文档: http://www.tickplus.org/doc
 - 项目仓库: [GitHub](https://github.com/your-repo)
 
 ## 📮 联系方式

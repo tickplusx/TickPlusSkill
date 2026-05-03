@@ -1,4 +1,4 @@
-# DemoTickPlusPythonSkill
+# TickPlusSkill
 
 TickPlus 股票数据 API Python SDK - 提供中国股市、港股、美股的实时行情和历史数据查询服务。
 

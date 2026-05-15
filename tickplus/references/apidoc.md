@@ -158,7 +158,7 @@ http://api.tickplus.org/plus/basic/daykline?symbol=stock&code=000001&period=1d&d
 
 实时行情指标全推，1-2分钟更新一次数据。
 
-**接口地址**: `/plus/basic/fullindicator`
+**接口地址**: `/plus/basic/fullfactor`
 
 **请求方式**: GET
 
@@ -215,7 +215,7 @@ http://api.tickplus.org/plus/basic/daykline?symbol=stock&code=000001&period=1d&d
 
 **示例**:
 ```
-http://api.tickplus.org/plus/basic/fullindicator?symbol=stock&code=000001,000002&token=123456789
+http://api.tickplus.org/plus/basic/fullfactor?symbol=stock&code=000001,000002&token=123456789
 ```
 
 ---
@@ -786,4 +786,4 @@ kline = BasicApi.getDayKline(
 
 ---
 
-**最后更新**: 2026-04-23
+**最后更新**: 2026-04-24

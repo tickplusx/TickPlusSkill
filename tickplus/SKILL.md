@@ -1,6 +1,6 @@
 ---
 name: tickplus-stock-api
-description: 使用 TickPlus 股票数据 API 获取实时行情、K线数据、财务指标等金融数据
+description: 使用 TickPlus 股票数据 API 获取实时行情、K线数据、财务指标等金融数据，支持 REST API 和 WebSocket 实时推送
 ---
 
 # TickPlus 股票数据 API 技能
@@ -9,12 +9,20 @@ description: 使用 TickPlus 股票数据 API 获取实时行情、K线数据、
 
 ## 核心功能
 
+### 0. WebSocket 实时推送（新增）- 专业版可用
+
+- **StockWebSocketClient**: WebSocket 实时行情推送客户端（需要专业版权限）
+  - 建立 WebSocket 长连接
+  - 订阅/取消订阅股票代码
+  - 接收实时行情数据（文本和二进制格式）
+  - 支持集合竞价、沪深A股等多种数据类型
+
 ### 1. Basic Api - 基础数据接口
 
 - **getStockList**: 获取股票列表（支持A股、ETF、债券、指数、港股、美股）
 - **getFullQuotes**: 实时行情全推数据
 - **getDayKline**: 实时日K线数据（支持日线、周线、月线、年线）
-- **getFullIndicator**: 行情指标全推（包含涨跌幅、换手率、市盈率等30+指标）
+- **getFullFactor**: 行情指标全推（包含涨跌幅、换手率、市盈率等30+指标）
 - **getFinanceCore**: 核心财务指标（ROE、每股收益、净资产等）
 - **getUpdateDayKline**: 盘后增量数据更新
 
@@ -40,6 +48,70 @@ description: 使用 TickPlus 股票数据 API 获取实时行情、K线数据、
 
 1. 在 [TickPlus官网](http://www.tickplus.org) 注册账号并获取 token
 2. 在项目配置文件中设置 token（`tickplus/scripts/Config.py`）
+
+### WebSocket 实时推送使用示例（新增）
+
+```python
+from tickplus.scripts.StockWebSocketClient import StockWebSocketClient
+from tickplus.scripts.Config import Config
+import time
+
+# 配置token
+token = Config.TOKEN
+
+# 创建WebSocket URL
+ws_url = f"ws://ws.tickplus.org/ws/{token}"
+
+# 创建客户端实例
+client = StockWebSocketClient(ws_url)
+
+# 建立连接
+if client.connect():
+    # 订阅股票（支持集合竞价、沪深A股等）
+    auth_codes = ["auction", "000001.SZ", "600000.SH"]
+    client.subscribe(token, auth_codes)
+    
+    # 等待接收数据
+    print("Waiting for data...")
+    time.sleep(10)
+    
+    # 取消订阅
+    client.unsubscribe(token, auth_codes)
+    
+    # 断开连接
+    client.disconnect()
+```
+
+**WebSocket 消息格式**：
+
+订阅消息：
+```json
+{
+    "token": "your_token",
+    "operation": "subscribe",
+    "authCodes": ["auction", "000001.SZ", "600000.SH"]
+}
+```
+
+取消订阅消息：
+```json
+{
+    "token": "your_token",
+    "operation": "unsubscribe",
+    "authCodes": ["auction", "000001.SZ", "600000.SH"]
+}
+```
+
+**支持的订阅类型**：
+- `auction`: 集合竞价数据（09:15-09:25）
+- `000001.SZ`: 深市股票代码
+- `600000.SH`: 沪市股票代码
+- 其他股票代码格式类似
+
+**运行完整测试**：
+```bash
+python tickplus/scripts/StockWebSocketClient.py
+```
 
 ### 基本调用示例
 
@@ -117,7 +189,7 @@ minute_kline = ProApi.getMinuteKline(
 
 ```python
 # 获取包含30+指标的行情数据
-indicators = BasicApi.getFullIndicator(
+indicators = BasicApi.getFullFactor(
     symbol="stock",
     code="000001,000002",
     token=token
@@ -207,7 +279,13 @@ special_stocks = ProApi.getGncgf(symbol="ts", token=token)
 from tickplus.scripts.StockApiClient import StockApiClient
 
 client = StockApiClient()
-client.demoForAllApis()  # 测试所有16个API接口
+client.demoForAllApis()  # 测试所有16个REST API接口
+```
+
+运行 WebSocket 实时推送测试：
+
+```bash
+python tickplus/scripts/StockWebSocketClient.py
 ```
 
 ## 参数说明
@@ -254,12 +332,19 @@ client.demoForAllApis()  # 测试所有16个API接口
 
 1. **Token认证**: 所有接口都需要有效的token，请在官网注册获取
 2. **权限等级**: 
-   - Basic Api: 所有用户可用
-   - Pro Api: 需要Pro级别权限
-   - Expert Api: 需要Expert级别权限
+   - Basic Api: 基础版用户可用
+   - Pro Api: 高级版用户可用
+   - Expert Api: 专业版用户可用（包含 WebSocket 实时推送）
+   - 权限向下兼容：专业版 > 高级版 > 基础版
 3. **批量限制**: 批量查询最多支持100个股票代码
-4. **日期格式**: 统一使用 `YYYY-MM-DD` 格式
-5. **交易时间**: 
+4. **WebSocket 连接**（专业版）:
+   - WebSocket地址：`ws://ws.tickplus.org/ws/{token}`
+   - 支持实时行情推送，数据更新频率为秒级
+   - 订阅后服务器会主动推送数据，无需轮询
+   - 支持文本和二进制两种数据格式
+   - 需要先建立连接，再发送订阅消息
+5. **日期格式**: 统一使用 `YYYY-MM-DD` 格式
+6. **交易时间**: 
    - A股: 09:30-11:30, 13:00-15:00
    - 港股: 09:30-12:00, 13:00-16:00
    - 集合竞价: 09:15-09:25
@@ -271,6 +356,7 @@ client.demoForAllApis()  # 测试所有16个API接口
    - 避免频繁全市场数据请求
    - 批量查询优于多次单次查询
    - 缓存常用数据减少API调用
+   - 对于实时性要求高的场景，优先使用 WebSocket
 
 ## 错误处理
 
@@ -306,12 +392,20 @@ except Exception as e:
 
 - 官方网站: http://www.tickplus.org
 - API文档: references/apidoc.md
-- 完整示例: scripts/StockApiClient.py
+- WebSocket使用说明: scripts/WEBSOCKET_README.md
+- 完整示例: scripts/StockApiClient.py, scripts/StockWebSocketClient.py
 - 配置说明: scripts/Config.py
 
 ## 更新日志
 
-- 2026-04-23: 初始版本，支持16个API接口
-  - Basic Api: 6个接口
+- 2026-05-15: 新增 WebSocket 实时推送功能
+  - 添加 StockWebSocketClient 类，支持长连接实时数据推送
+  - 支持订阅/取消订阅股票代码
+  - 支持集合竞价、沪深A股等多种数据类型
+  - 支持文本和二进制两种数据格式
+  - 添加完整的测试代码和使用示例
+- 2026-04-24: 核对并更新API接口文档
+  - Basic Api: 6个接口（修正fullfactor接口URL）
   - Pro Api: 6个接口
   - Expert Api: 4个接口
+- 2026-04-23: 初始版本，支持16个API接口

@@ -38,8 +38,8 @@ class StockApiClient(object):
             )
 
             # 4. 行情指标全推
-            print("\n4. 测试 getFullIndicator - 行情指标全推")
-            data = BasicApi.getFullIndicator(symbol="stock", code="000001,000002", token=token)
+            print("\n4. 测试 getFullFactor - 行情指标全推")
+            data = BasicApi.getFullFactor(symbol="stock", code="000001,000002", token=token)
 
             # 5. 核心财务指标
             print("\n5. 测试 getFinanceCore - 核心财务指标")

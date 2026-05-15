@@ -75,7 +75,7 @@ def getDayKline(symbol: str, code: str, period: str = "1d", dividend: str = "1",
     return data
 
 
-def getFullIndicator(symbol: str, code: str = "", token: str = "", method: str = "get") -> str:
+def getFullFactor(symbol: str, code: str = "", token: str = "", method: str = "get") -> str:
     """
     实时行情指标全推，1-2分钟更新一次数据。
     
@@ -85,13 +85,13 @@ def getFullIndicator(symbol: str, code: str = "", token: str = "", method: str =
     :param method: 请求方法，默认get
     :return: JSON格式的字符串数据
     """
-    url = Config.SERVER_URL + "/plus/basic/fullindicator"
+    url = Config.SERVER_URL + "/plus/basic/fullfactor"
     params = {"symbol": symbol, "token": token}
     if code:
         params["code"] = code
     result = DataUtil.request(url, method, params)
     data = json.loads(result)
-    DataUtil.printLog("/plus/basic/fullindicator", params, data)
+    DataUtil.printLog("/plus/basic/fullfactor", params, data)
     return data
 
 

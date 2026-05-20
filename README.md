@@ -190,7 +190,8 @@ python tickplus/scripts/StockWebSocketClient.py
 
 - **API 接口文档**: [tickplus/references/apidoc.md](tickplus/references/apidoc.md)
 - **使用技能文档**: [tickplus/SKILL.md](tickplus/SKILL.md)
-- **WebSocket 使用说明**: [tickplus/scripts/WEBSOCKET_README.md](tickplus/scripts/WEBSOCKET_README.md)
+- **WebSocket 详细文档**: [tickplus/references/websocket.md](tickplus/references/websocket.md)
+- **GitHub 项目**: https://github.com/tickplusx/TickPlusSkill
 - **在线文档**: http://www.tickplus.org
 
 ## 💡 使用示例
@@ -256,6 +257,8 @@ if five_level:
 
 ### 示例5：WebSocket 实时推送（新增）
 
+**基础用法**：
+
 ```python
 from tickplus.scripts.StockWebSocketClient import StockWebSocketClient
 from tickplus.scripts.Config import Config
@@ -284,6 +287,28 @@ if client.connect():
     client.disconnect()
 ```
 
+**高级用法**：
+
+关于 WebSocket 的更多高级功能，包括：
+- 自定义消息处理
+- 错误处理和自动重连
+- 数据批处理和过滤
+- 性能优化建议
+- 常见问题解答
+
+请参考完整文档：[tickplus/references/websocket.md](tickplus/references/websocket.md)
+
+**获取官方示例代码**：
+
+```bash
+# 从 GitHub 获取最新示例
+git clone https://github.com/tickplusx/TickPlusSkill.git
+cd TickPlusSkill
+
+# 运行 WebSocket 测试
+python tickplus/scripts/StockWebSocketClient.py
+```
+
 ## 🔧 项目结构
 
 ```
@@ -298,11 +323,11 @@ DemoTickPlusPythonSkill/
 │   │   │   └── DataUtil.py      # 工具类
 │   │   ├── Config.py            # 配置文件
 │   │   ├── StockApiClient.py    # REST API客户端测试类
-│   │   ├── StockWebSocketClient.py  # WebSocket客户端（新增）
-│   │   └── WEBSOCKET_README.md  # WebSocket使用说明（新增）
+│   │   └── StockWebSocketClient.py  # WebSocket客户端（新增）
 │   ├── references/
 │   │   ├── apidoc.json          # 原始API文档
-│   │   └── apidoc.md            # API接口文档
+│   │   ├── apidoc.md            # API接口文档
+│   │   └── websocket.md         # WebSocket详细文档（新增）
 │   └── SKILL.md                 # 使用技能文档
 ├── requirements.txt             # 依赖包
 └── README.md                    # 项目说明
@@ -321,6 +346,8 @@ DemoTickPlusPythonSkill/
    - 支持实时行情推送，数据更新频率为秒级
    - 订阅后服务器会主动推送数据，无需轮询
    - 支持文本和二进制两种数据格式
+   - 详细文档：[tickplus/references/websocket.md](tickplus/references/websocket.md)
+   - 官方示例：https://github.com/tickplusx/TickPlusSkill
 4. **批量限制**: 批量查询最多支持 100 个股票代码
 5. **日期格式**: 统一使用 `YYYY-MM-DD` 格式
 6. **交易时间**: 
@@ -345,7 +372,8 @@ DemoTickPlusPythonSkill/
 
 - TickPlus 官网: http://www.tickplus.org
 - API 文档: http://www.tickplus.org/doc
-- 项目仓库: [GitHub](https://github.com/your-repo)
+- GitHub 项目: https://github.com/tickplusx/TickPlusSkill
+- WebSocket 文档: [tickplus/references/websocket.md](tickplus/references/websocket.md)
 
 ## 📮 联系方式
 

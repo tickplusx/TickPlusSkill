@@ -149,6 +149,11 @@ class StockWebSocketClient(object):
             print("WebSocket connection closed")
 
 
+   # authCodes参数解释
+    # 订阅tick数据可取枚举值如下：
+    # - 000001.SZ - 订阅股票tick数据，按个数订阅。
+    # - auction - 订阅沪深京A股集合竞价期间竞价数据。
+
 if __name__ == "__main__":
 
     token = Config.TOKEN  # 官网获取Token

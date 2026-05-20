@@ -51,6 +51,8 @@ description: 使用 TickPlus 股票数据 API 获取实时行情、K线数据、
 
 ### WebSocket 实时推送使用示例（新增）
 
+**快速开始**：
+
 ```python
 from tickplus.scripts.StockWebSocketClient import StockWebSocketClient
 from tickplus.scripts.Config import Config
@@ -82,6 +84,17 @@ if client.connect():
     client.disconnect()
 ```
 
+**详细说明**：
+
+关于 WebSocket 的完整使用指南，包括：
+- 自定义消息处理
+- 错误处理和重连机制
+- 数据格式详解
+- 高级用法（批处理、数据过滤等）
+- 常见问题解答
+
+请参考：[references/websocket.md](references/websocket.md)
+
 **WebSocket 消息格式**：
 
 订阅消息：
@@ -107,6 +120,23 @@ if client.connect():
 - `000001.SZ`: 深市股票代码
 - `600000.SH`: 沪市股票代码
 - 其他股票代码格式类似
+
+**authCodes 参数说明**：
+- `000001.SZ` - 订阅股票tick数据，按个数订阅
+- `auction` - 订阅沪深京A股集合竞价期间竞价数据
+- 支持同时订阅多个代码
+
+**获取官方示例代码**：
+
+如果在使用过程中遇到问题，建议从 GitHub 获取最新的官方示例代码：
+
+```bash
+git clone https://github.com/tickplusx/TickPlusSkill.git
+cd TickPlusSkill
+python tickplus/scripts/StockWebSocketClient.py
+```
+
+更多详细信息请参考：[references/websocket.md](references/websocket.md)
 
 **运行完整测试**：
 ```bash
@@ -391,8 +421,9 @@ except Exception as e:
 ## 相关资源
 
 - 官方网站: http://www.tickplus.org
+- GitHub 项目: https://github.com/tickplusx/TickPlusSkill
 - API文档: references/apidoc.md
-- WebSocket使用说明: scripts/WEBSOCKET_README.md
+- WebSocket详细文档: references/websocket.md
 - 完整示例: scripts/StockApiClient.py, scripts/StockWebSocketClient.py
 - 配置说明: scripts/Config.py
 

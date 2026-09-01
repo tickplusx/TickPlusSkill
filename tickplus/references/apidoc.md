@@ -47,7 +47,7 @@ TickPlus 是一个提供股票实时数据API接口的平台，提供沪深京A�
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| symbol | String | 是 | 股票类型：stock-沪深京A股，etf-ETF基金，bond-沪深可转债，index-指数，hk-港股，usa-美股 |
+| symbol | String | 是 | 股票类型：stock-沪深京A股，etf-ETF基金，bond-沪深可转债，index-指数 |
 | token | String | 是 | 登录网站获取token |
 
 **返回数据**:
@@ -474,81 +474,6 @@ http://api.tickplus.org/plus/pro/gncgf?symbol=hy&token=88888888
 
 ---
 
-### 11. 港股实时行情全推
-
-港股实时行情全推。
-
-**接口地址**: `/plus/pro/fullhkquotes`
-
-**请求方式**: GET
-
-**权限等级**: 高级版、专业版
-
-**请求参数**:
-
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| code | String | 否 | 股票代码。code取值为空，则表示全推全市场数据；code取值为00001,00002，则表示批量获取，股票数量最大为100个；code取值为00001，则表示获取单个股票数据 |
-| token | String | 是 | 登录网站获取token |
-
-**返回数据**:
-
-| 字段名 | 类型 | 说明 |
-|--------|------|------|
-| t | String | 交易时间 |
-| code | String | 股票代码 |
-| o | float | 开盘价（元） |
-| c | float | 收盘价（元） |
-| h | float | 最高价（元） |
-| l | float | 最低价（元） |
-| v | float | 成交量（手） |
-| a | float | 成交额（元） |
-| pc | float | 昨收价（元） |
-
-**示例**:
-```
-http://api.tickplus.org/plus/pro/fullhkquotes?code=00001,00002&token=123456789
-```
-
----
-
-### 12. 美股实时行情全推
-
-美股实时行情全推。
-
-**接口地址**: `/plus/pro/fullusaquotes`
-
-**请求方式**: GET
-
-**权限等级**: 高级版、专业版
-
-**请求参数**:
-
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| code | String | 否 | 股票代码。code取值为空，则表示全推全市场数据；code取值为BABA,BIDU，则表示批量获取，股票数量最大为100个；code取值为BABA，则表示获取单个股票数据 |
-| token | String | 是 | 登录网站获取token |
-
-**返回数据**:
-
-| 字段名 | 类型 | 说明 |
-|--------|------|------|
-| t | String | 交易时间 |
-| code | String | 股票代码 |
-| o | float | 开盘价（元） |
-| c | float | 收盘价（元） |
-| h | float | 最高价（元） |
-| l | float | 最低价（元） |
-| v | float | 成交量（手） |
-| a | float | 成交额（元） |
-| pc | float | 昨收价（元） |
-
-**示例**:
-```
-http://api.tickplus.org/plus/pro/fullusaquotes?code=BABA,BIDU&token=123456789
-```
-
----
 
 ## Expert Api - 专家接口
 

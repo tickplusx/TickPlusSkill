@@ -9,7 +9,7 @@ def getStockList(symbol: str, token: str, method: str = "get") -> str:
     获取股票列表。
     历史数据收盘后六点更新。
     
-    :param symbol: stock-沪深京A股，etf-ETF基金，bond-沪深可转债，index-指数，hk-港股，usa-美股
+    :param symbol: stock-沪深京A股，etf-ETF基金，bond-沪深可转债，index-指数
     :param token: 激活Token参考 http://www.tickplus.org/
     :param method: 请求方法，默认get
     :return: JSON格式的字符串数据

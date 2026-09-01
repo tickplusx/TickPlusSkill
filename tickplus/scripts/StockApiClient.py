@@ -72,14 +72,6 @@ class StockApiClient(object):
             print("\n10. 测试 getGncgf - 概念成分股")
             data = ProApi.getGncgf(symbol="hy", token=token)
 
-            # 11. 港股实时行情全推
-            print("\n11. 测试 getFullHkQuotes - 港股实时行情全推")
-            data = ProApi.getFullHkQuotes(code="00001,00002", token=token)
-
-            # 12. 美股实时行情全推
-            print("\n12. 测试 getFullUsaQuotes - 美股实时行情全推")
-            data = ProApi.getFullUsaQuotes(code="BABA,BIDU", token=token)
-
             # ========== Expert Api 测试 ==========
             print("\n【Expert Api 测试】")
             print("-" * 80)

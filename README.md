@@ -1,4 +1,4 @@
-# TickPlusPythonSkill
+# DemoTickPlusPythonSkill
 
 TickPlus 股票数据 API Python SDK - 提供中国股市、港股、美股的实时行情和历史数据查询服务，支持 REST API 和 WebSocket 实时推送。
 
@@ -168,8 +168,6 @@ python tickplus/scripts/StockWebSocketClient.py
 | getMinuteKline | 实时分钟K线数据 | 高级版+ |
 | getTimeKline | 日内分时数据 | 高级版+ |
 | getGncgf | 概念成分股 | 高级版+ |
-| getFullHkQuotes | 港股实时行情全推 | 高级版+ |
-| getFullUsaQuotes | 美股实时行情全推 | 高级版+ |
 
 ### Expert Api（专家接口）- 专业版可用
 

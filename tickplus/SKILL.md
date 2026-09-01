@@ -32,8 +32,6 @@ description: 使用 TickPlus 股票数据 API 获取实时行情、K线数据、
 - **getMinuteKline**: 实时分钟K线数据（1分钟、5分钟、15分钟、30分钟、1小时）
 - **getTimeKline**: 日内分时数据
 - **getGncgf**: 概念成分股（行业板块、概念板块、特色板块）
-- **getFullHkQuotes**: 港股实时行情全推
-- **getFullUsaQuotes**: 美股实时行情全推
 
 ### 3. Expert Api - 专家级数据接口
 
@@ -248,23 +246,8 @@ finance = BasicApi.getFinanceCore(
 # gearRatio-资产负债比率等
 ```
 
-### 示例6：获取港股/美股数据
 
-```python
-# 获取港股实时行情
-hk_quotes = ProApi.getFullHkQuotes(
-    code="00001,00002",  # 汇丰控股、银河娱乐
-    token=token
-)
-
-# 获取美股实时行情
-usa_quotes = ProApi.getFullUsaQuotes(
-    code="BABA,BIDU,AAPL",  # 阿里巴巴、百度、苹果
-    token=token
-)
-```
-
-### 示例7：获取高级数据
+### 示例6：获取高级数据
 
 ```python
 # 获取买卖五档数据
@@ -288,7 +271,7 @@ board_data = ExpertApi.getFullBoard(
 )
 ```
 
-### 示例8：获取板块成分股
+### 示例6：获取板块成分股
 
 ```python
 # 获取行业板块成分股
@@ -328,8 +311,6 @@ python tickplus/scripts/StockWebSocketClient.py
   - `etf`: ETF基金
   - `bond`: 沪深可转债
   - `index`: 指数
-  - `hk`: 港股
-  - `usa`: 美股
 
 ### K线周期参数
 

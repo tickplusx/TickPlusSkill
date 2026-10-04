@@ -151,13 +151,16 @@ class StockWebSocketClient(object):
 
    # authCodes参数解释
     # 订阅tick数据可取枚举值如下：
-    # - 000001.SZ - 订阅股票tick数据，按个数订阅。
+    # - 000001.SZ - 订阅股票tick数据，按个数订阅，支持多个股票订阅。
     # - auction - 订阅沪深京A股集合竞价期间竞价数据。
+    # - minute.hsj - 订阅沪深京A股一分钟K线数据。
+    # - minute.index - 订阅A股指数一分钟K线数据。
+    # - minute.etf - 订阅ETF一分钟K线数据。
 
 if __name__ == "__main__":
 
     token = Config.TOKEN  # 官网获取Token
-    auth_codes = ["auction", "000001.SZ", "600000.SH"]  # 订阅集合竞价以及沪深A股行情数据
+    auth_codes = ["auction","minute.hsj", "000001.SZ", "600000.SH"]  # 订阅集合竞价、沪深京A股股票1分钟数据以及沪深A股行情数据
     ws_url = f"ws://ws.tickplus.org/ws/{token}"  # 创建WebSocket URL
 
     # 创建客户端实例

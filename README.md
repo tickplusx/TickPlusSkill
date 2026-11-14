@@ -1,25 +1,24 @@
 # DemoTickPlusPythonSkill
 
-TickPlus 股票数据 API Python SDK - 提供中国股市、港股、美股的实时行情和历史数据查询服务，支持 REST API 和 WebSocket 实时推送。
+TickPlus 股票数据 API Python SDK - 提供沪深京A股、ETF基金、沪深可转债、指数的实时行情和历史数据查询服务，支持 REST API 和 WebSocket 实时推送。
 
 ## 📋 项目简介
 
 本项目是 TickPlus 平台的 Python SDK 实现，提供了完整的 API 接口调用封装，支持获取：
 
-- **实时行情**: A股、港股、美股的实时报价数据
-- **K线数据**: 日线、周线、月线、分钟线等多种周期
-- **财务指标**: ROE、每股收益、净资产等核心财务数据
-- **高级数据**: 逐笔交易、买卖五档、集合竞价、涨停板等
-- **WebSocket 实时推送**: 长连接实时行情推送，支持秒级更新
+- **实时行情**: A股、ETF、可转债、指数的实时报价数据
+- **K线数据**: 日线、周线、月线、年线及 1m/5m/15m/30m/1h 分钟线
+- **指标数据**: 行情指标（量比、换手率、市盈率等）、核心财务指标、股本数据
+- **高级数据**: 逐笔交易、买卖五档、集合竞价、异动数据（涨停板股池）
+- **WebSocket 实时推送**: 长连接实时数据推送，支持秒级更新
 
 ## ✨ 主要特性
 
 - ✅ 支持 16 个 REST API 接口，覆盖基础、专业、专家三个等级
 - ✅ 支持 WebSocket 实时推送，秒级数据更新
-- ✅ 完整的数据类型支持：A股、ETF、债券、指数、港股、美股
+- ✅ 完整的数据类型支持：沪深京A股、ETF基金、沪深可转债、指数
 - ✅ 清晰的权限分级：基础版、高级版、专业版
 - ✅ 简洁的 API 设计，易于集成和使用
-- ✅ 完善的文档和示例代码
 - ✅ 统一的错误处理和日志输出
 
 ## 📦 安装依赖
@@ -56,14 +55,14 @@ from tickplus.scripts.Config import Config
 
 token = Config.TOKEN
 
-# 获取股票列表
+# 获取股票列表（stock/etf/bond/index）
 stocks = BasicApi.getStockList(symbol="stock", token=token)
 print(f"共 {len(stocks)} 只股票")
 
 # 获取实时行情
 quotes = BasicApi.getFullQuotes(
-    symbol="stock", 
-    code="000001,000002", 
+    symbol="stock",
+    code="000001,000002",
     token=token
 )
 
@@ -83,7 +82,7 @@ kline = BasicApi.getDayKline(
 )
 ```
 
-#### WebSocket 实时推送使用（新增）
+#### WebSocket 实时推送使用
 
 ```python
 from tickplus.scripts.StockWebSocketClient import StockWebSocketClient
@@ -98,17 +97,17 @@ client = StockWebSocketClient(ws_url)
 
 # 建立连接
 if client.connect():
-    # 订阅股票（支持集合竞价、沪深A股等）
-    auth_codes = ["auction", "000001.SZ", "600000.SH"]
+    # 订阅数据（集合竞价 + 个股 tick + 分钟K线）
+    auth_codes = ["auction", "000001.SZ", "600000.SH", "minute.hsj"]
     client.subscribe(token, auth_codes)
-    
+
     # 等待接收数据
     print("Waiting for data...")
     time.sleep(10)
-    
+
     # 取消订阅
     client.unsubscribe(token, auth_codes)
-    
+
     # 断开连接
     client.disconnect()
 ```
@@ -119,35 +118,53 @@ if client.connect():
 
 ```bash
 python tickplus/scripts/StockApiClient.py
+# 等价写法（在项目根目录执行）
+python -m tickplus.scripts.StockApiClient
 ```
 
 这将测试所有 16 个 REST API 接口，验证功能是否正常。
 
-#### 测试 WebSocket 实时推送（新增）
+#### 测试 WebSocket 实时推送
 
 ```bash
 python tickplus/scripts/StockWebSocketClient.py
+# 等价写法（在项目根目录执行）
+python -m tickplus.scripts.StockWebSocketClient
 ```
 
 这将测试 WebSocket 连接、订阅、数据接收、取消订阅等功能。
 
+#### 从 apidoc.json 重新生成接口文档
+
+```bash
+python tickplus/scripts/generate_apidoc.py <apidoc.json 路径> tickplus/references/apidoc.md
+```
+
 ## 📚 API 接口分类
 
-### WebSocket 实时推送（新增）
+### WebSocket 实时推送
 
 | 功能 | 说明 | 权限 |
 |------|------|------|
-| StockWebSocketClient | WebSocket 客户端 | 专业版+ |
-| connect() | 建立 WebSocket 连接 | 专业版+ |
-| subscribe() | 订阅股票代码 | 专业版+ |
-| unsubscribe() | 取消订阅 | 专业版+ |
-| disconnect() | 断开连接 | 专业版+ |
+| StockWebSocketClient | WebSocket 客户端 | 按数据类型开通 |
+| connect() | 建立 WebSocket 连接 | 按数据类型开通 |
+| subscribe() | 订阅股票代码/数据类型 | 按数据类型开通 |
+| unsubscribe() | 取消订阅 | 按数据类型开通 |
+| disconnect() | 断开连接 | 按数据类型开通 |
 
 **特点**：
 - 长连接，服务器主动推送数据
 - 秒级数据更新
-- 支持文本和二进制数据格式
+- 支持文本和二进制（gzip/zip）数据格式
 - 适用于实时性要求高的场景
+
+**推送权限与数据类型对应**：
+
+| authCode | 数据 | 对应接口（权限） |
+|------|------|------|
+| `000001.SZ` / `600000.SH` | 个股 tick | `/plus/basic/fullquotes`（1、2、3）、`/plus/expert/fivelevel`（3） |
+| `auction` | 集合竞价 | `/plus/expert/fullbid`（3） |
+| `minute.hsj` / `minute.index` / `minute.etf` | 1 分钟 K 线 | `/plus/pro/fullminute`（2、3） |
 
 ### Basic Api（基础接口）- 基础版、高级版、专业版可用
 
@@ -156,27 +173,29 @@ python tickplus/scripts/StockWebSocketClient.py
 | getStockList | 获取股票列表 | 基础版+ |
 | getFullQuotes | 实时行情全推 | 基础版+ |
 | getDayKline | 实时日K线数据 | 基础版+ |
-| getFullFactor | 行情指标全推 | 基础版+ |
+| getFullMetric | 行情指标全推 | 基础版+ |
 | getFinanceCore | 核心财务指标 | 基础版+ |
+| getCapital | 股本数据 | 基础版+ |
 | getUpdateDayKline | 盘后增量数据 | 基础版+ |
 
 ### Pro Api（专业接口）- 高级版、专业版可用
 
 | 接口 | 说明 | 权限 |
 |------|------|------|
-| getFullMinute | 实时分钟全推 | 高级版+ |
-| getMinuteKline | 实时分钟K线数据 | 高级版+ |
 | getTimeKline | 日内分时数据 | 高级版+ |
-| getGncgf | 概念成分股 | 高级版+ |
+| getGncgf | 题材概念成分股 | 高级版+ |
+| getMinuteKline | 实时分钟K线数据 | 高级版+ |
+| getFullMinute | 盘中分钟K线全推 | 高级版+ |
+| getFullMinuteSnapshot | 盘中分钟快照全推 | 高级版+ |
 
 ### Expert Api（专家接口）- 专业版可用
 
 | 接口 | 说明 | 权限 |
 |------|------|------|
 | getTransaction | 逐笔交易数据 | 专业版 |
+| getFiveLevel | 买卖五档全推 | 专业版 |
 | getFullBid | 集合竞价全推 | 专业版 |
-| getFullFive | 买卖五档全推 | 专业版 |
-| getFullBoard | 涨停板全推 | 专业版 |
+| getFluctuation | 异动数据（涨停板股池） | 专业版 |
 
 **权限说明**：
 - **基础版 (1)**: 免费注册用户，可访问 Basic Api
@@ -205,15 +224,11 @@ for quote in quotes:
     print(f"{quote['code']}: 最新价={quote['c']}, 昨收={quote['pc']}")
 ```
 
-### 示例2：获取技术指标
+### 示例2：获取行情指标
 
 ```python
-# 获取包含30+技术指标的行情数据
-indicators = BasicApi.getFullFactor(
-    symbol="stock",
-    code="000001",
-    token=token
-)
+# 行情指标接口没有 symbol 参数
+indicators = BasicApi.getFullMetric(code="000001", token=token)
 
 if indicators:
     data = indicators[0]
@@ -239,21 +254,31 @@ for industry in industries:
 ### 示例4：获取买卖五档
 
 ```python
-# 获取买卖五档数据（需要专业版权限）
-five_level = ExpertApi.getFullFive(code="000001", token=token)
+# 获取买卖五档数据（需要专业版权限，symbol 必填）
+five_level = ExpertApi.getFiveLevel(symbol="stock", code="000001", token=token)
 
 if five_level:
     data = five_level[0]
     print("买盘:")
     for i in range(1, 6):
-        print(f"  买{i}: {data[f'bp{i}']} x {data[f'bv{i}]}")
-    
+        print(f"  买{i}: {data[f'bp{i}']} x {data[f'bv{i}']}")
+
     print("卖盘:")
     for i in range(1, 6):
-        print(f"  卖{i}: {data[f'sp{i}']} x {data[f'sv{i}]}")
+        print(f"  卖{i}: {data[f'sp{i}']} x {data[f'sv{i}']}")
 ```
 
-### 示例5：WebSocket 实时推送（新增）
+### 示例5：获取异动数据（涨停板股池）
+
+```python
+# 需要专业版权限
+fluctuation = ExpertApi.getFluctuation(tradeDate="2026-11-14", token=token)
+
+for item in fluctuation:
+    print(f"{item['code']} 连续涨停 {item['days']} 天，封板资金 {item['fba']}")
+```
+
+### 示例6：WebSocket 实时推送
 
 **基础用法**：
 
@@ -270,17 +295,17 @@ client = StockWebSocketClient(ws_url)
 
 # 建立连接
 if client.connect():
-    # 订阅集合竞价和沪深A股
-    auth_codes = ["auction", "000001.SZ", "600000.SH"]
+    # 订阅集合竞价、个股 tick 和分钟K线
+    auth_codes = ["auction", "000001.SZ", "600000.SH", "minute.hsj"]
     client.subscribe(token, auth_codes)
-    
+
     # 等待接收数据（服务器会主动推送）
     print("Waiting for real-time data...")
     time.sleep(10)
-    
+
     # 取消订阅
     client.unsubscribe(token, auth_codes)
-    
+
     # 断开连接
     client.disconnect()
 ```
@@ -312,47 +337,51 @@ python tickplus/scripts/StockWebSocketClient.py
 ```
 DemoTickPlusPythonSkill/
 ├── tickplus/
-│   ├── scripts/
-│   │   ├── api/
-│   │   │   ├── BasicApi.py      # 基础API接口（6个）
-│   │   │   ├── ProApi.py        # 专业API接口（6个）
-│   │   │   └── ExpertApi.py     # 专家API接口（4个）
-│   │   ├── util/
-│   │   │   └── DataUtil.py      # 工具类
-│   │   ├── Config.py            # 配置文件
-│   │   ├── StockApiClient.py    # REST API客户端测试类
-│   │   └── StockWebSocketClient.py  # WebSocket客户端（新增）
+│   ├── __init__.py
+│   ├── SKILL.md                     # 使用技能文档
 │   ├── references/
-│   │   ├── apidoc.json          # 原始API文档
-│   │   ├── apidoc.md            # API接口文档
-│   │   └── websocket.md         # WebSocket详细文档（新增）
-│   └── SKILL.md                 # 使用技能文档
-├── requirements.txt             # 依赖包
-└── README.md                    # 项目说明
+│   │   ├── apidoc.md                # API接口文档（由 apidoc.json 生成）
+│   │   └── websocket.md             # WebSocket详细文档
+│   └── scripts/
+│       ├── api/
+│       │   ├── BasicApi.py          # 基础API接口（7个）
+│       │   ├── ProApi.py            # 专业API接口（5个）
+│       │   └── ExpertApi.py         # 专家API接口（4个）
+│       ├── util/
+│       │   └── DataUtil.py          # 请求与压缩数据解析工具
+│       ├── Config.py                # 配置文件
+│       ├── StockApiClient.py        # REST API客户端测试类
+│       ├── StockWebSocketClient.py  # WebSocket客户端
+│       ├── CompleteExampleClient.py # WebSocket完整示例
+│       ├── generate_apidoc.py       # apidoc.md 生成器
+│       └── __init__.py
+├── requirements.txt                 # 依赖包
+└── README.md                        # 项目说明
 ```
 
 ## ⚠️ 注意事项
 
 1. **Token 认证**: 所有接口都需要有效的 token，请在官网注册获取
-2. **权限等级**: 
+2. **权限等级**:
    - Basic Api: 基础版、高级版、专业版可用
    - Pro Api: 高级版、专业版可用
    - Expert Api: 仅专业版可用
-   - WebSocket: 专业版可用
+   - WebSocket 推送: 分钟K线推送为高级版+，五档/竞价推送为专业版
 3. **WebSocket 连接**:
    - WebSocket地址：`ws://ws.tickplus.org/ws/{token}`
-   - 支持实时行情推送，数据更新频率为秒级
+   - 支持实时数据推送，数据更新频率为秒级
    - 订阅后服务器会主动推送数据，无需轮询
-   - 支持文本和二进制两种数据格式
+   - 支持文本和二进制（gzip/zip）两种数据格式
    - 详细文档：[tickplus/references/websocket.md](tickplus/references/websocket.md)
    - 官方示例：https://github.com/tickplusx/TickPlusSkill
 4. **批量限制**: 批量查询最多支持 100 个股票代码
-5. **日期格式**: 统一使用 `YYYY-MM-DD` 格式
-6. **交易时间**: 
+5. **单只限制**: `daykline`、`financecore`、`capital`、`timekline`、`minutekline`、`transaction` 仅支持单个股票代码
+6. **无 symbol 参数**: `fullmetric`（行情指标）与 `fullbid`（集合竞价）只接受 `code` 与 `token`
+7. **日期格式**: 统一使用 `YYYY-MM-DD` 格式
+8. **交易时间**:
    - A股: 09:30-11:30, 13:00-15:00
-   - 港股: 09:30-12:00, 13:00-16:00
    - 集合竞价: 09:15-09:25
-7. **性能建议**:
+9. **性能建议**:
    - 避免频繁全市场数据请求
    - 批量查询优于多次单次查询
    - 缓存常用数据减少 API 调用
@@ -381,4 +410,4 @@ DemoTickPlusPythonSkill/
 
 ---
 
-**最后更新**: 2026-05-15
+**最后更新**: 2026-11-14

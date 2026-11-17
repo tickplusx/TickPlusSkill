@@ -24,7 +24,13 @@ TickPlus 股票数据 API Python SDK - 提供沪深京A股、ETF基金、沪深�
 ## 📦 安装依赖
 
 ```bash
-pip install -r requirements.txt
+pip install tickplus
+```
+
+也可以从源码仓库安装：
+
+```bash
+pip install git+https://github.com/tickplusx/TickPlusSkill.git
 ```
 
 依赖包：
@@ -134,11 +140,6 @@ python -m tickplus.scripts.StockWebSocketClient
 
 这将测试 WebSocket 连接、订阅、数据接收、取消订阅等功能。
 
-#### 从 apidoc.json 重新生成接口文档
-
-```bash
-python tickplus/scripts/generate_apidoc.py <apidoc.json 路径> tickplus/references/apidoc.md
-```
 
 ## 📚 API 接口分类
 
@@ -206,10 +207,10 @@ python tickplus/scripts/generate_apidoc.py <apidoc.json 路径> tickplus/referen
 ## 📖 详细文档
 
 - **API 接口文档**: [tickplus/references/apidoc.md](tickplus/references/apidoc.md)
-- **使用技能文档**: [tickplus/SKILL.md](tickplus/SKILL.md)
 - **WebSocket 详细文档**: [tickplus/references/websocket.md](tickplus/references/websocket.md)
+- **使用技能文档**: [tickplus/SKILL.md](tickplus/SKILL.md)
+- **在线文档**: http://www.tickplus.org/doc
 - **GitHub 项目**: https://github.com/tickplusx/TickPlusSkill
-- **在线文档**: http://www.tickplus.org
 
 ## 💡 使用示例
 
@@ -319,7 +320,7 @@ if client.connect():
 - 性能优化建议
 - 常见问题解答
 
-请参考完整文档：[tickplus/references/websocket.md](tickplus/references/websocket.md)
+请参考完整文档：[tickplus/references/websocket.md](https://github.com/tickplusx/TickPlusSkill/blob/main/tickplus/references/websocket.md)
 
 **获取官方示例代码**：
 
@@ -372,7 +373,6 @@ DemoTickPlusPythonSkill/
    - 支持实时数据推送，数据更新频率为秒级
    - 订阅后服务器会主动推送数据，无需轮询
    - 支持文本和二进制（gzip/zip）两种数据格式
-   - 详细文档：[tickplus/references/websocket.md](tickplus/references/websocket.md)
    - 官方示例：https://github.com/tickplusx/TickPlusSkill
 4. **批量限制**: 批量查询最多支持 100 个股票代码
 5. **单只限制**: `daykline`、`financecore`、`capital`、`timekline`、`minutekline`、`transaction` 仅支持单个股票代码
@@ -398,9 +398,11 @@ DemoTickPlusPythonSkill/
 ## 🔗 相关链接
 
 - TickPlus 官网: http://www.tickplus.org
-- API 文档: http://www.tickplus.org/doc
+- 在线文档: http://www.tickplus.org/doc
+- API 接口文档: [tickplus/references/apidoc.md](https://github.com/tickplusx/TickPlusSkill/blob/main/tickplus/references/apidoc.md)
+- WebSocket 详细文档: [tickplus/references/websocket.md](https://github.com/tickplusx/TickPlusSkill/blob/main/tickplus/references/websocket.md)
 - GitHub 项目: https://github.com/tickplusx/TickPlusSkill
-- WebSocket 文档: [tickplus/references/websocket.md](tickplus/references/websocket.md)
+
 
 ## 📮 联系方式
 
